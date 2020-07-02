@@ -11,10 +11,15 @@
 
 body {
     background-color: bgColor;
+    /* Prevent scrolling. Panning and zooming is handed by the camera instead. */
+    overflow: hidden;
+    cursor: move;
 }
 
 .refidex {
-    transform: translate(300px, 300px);
+    transform-origin: 0 0;
+    pointer-events: none;
+    user-select: none;
 }
 
 .line {
@@ -84,4 +89,7 @@ body {
     padding: 5px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
+    pointer-events: all;
+    user-select: text;
+    cursor: text;
 }

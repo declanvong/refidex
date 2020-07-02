@@ -17,6 +17,10 @@ export class NodeView extends React.Component<{
   left: number,
   node: RefidexNode,
 }> {
+  private stopEvent(e: React.MouseEvent<HTMLDivElement>) {
+    e.stopPropagation();
+  }
+
   render() {
     const { top, left, node } = this.props;
     return (
@@ -26,7 +30,7 @@ export class NodeView extends React.Component<{
             {node.icon}
           </div>
         </div>
-        <div className={styles.title}>
+        <div className={styles.title} onMouseDown={this.stopEvent} onMouseUp={this.stopEvent} onMouseMove={this.stopEvent}>
           <span>{node.title}</span>
         </div>
       </div>

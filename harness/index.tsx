@@ -12,12 +12,12 @@ const n = (id: string, title: string, dependencies?: string[], icon?: React.Reac
 });
 
 const nodes: RefidexNode[] = [
-  n('a', 'Basic tech tree viewing', [], '🌭', Status.IN_PROGRESS),
+  n('a', 'Basic tech tree viewing', [], '🌭', Status.DONE),
   n('b', 'Multiple dependencies', ['a'], undefined, Status.PLANNED),
   n('c', 'Domains', ['b'], undefined, Status.PLANNED),
   n('d', 'Mainline detection', ['c'], undefined, Status.PLANNED),
-  n('e', 'Refactoring', ['a'], undefined, Status.PLANNED),
-  n('f', 'Canvas panning', ['a'], undefined, Status.IN_PROGRESS),
+  n('e', 'Refactoring', ['a'], undefined, Status.IN_PROGRESS),
+  n('f', 'Canvas panning', ['a'], undefined, Status.DONE),
   n('g', 'Cross-domain dependencies', ['c'], undefined, Status.PLANNED),
 ];
 
