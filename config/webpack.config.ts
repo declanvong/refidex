@@ -12,7 +12,7 @@ export default {
   devtool: devMode ? 'cheap-module-eval-source-map' : undefined,
   devServer: devMode
     ? {
-        contentBase: path.resolve(__dirname, '../dist'),
+        contentBase: path.resolve(__dirname, '../docs'),
       }
     : undefined,
   entry: path.resolve(__dirname, `../harness/index.tsx`),
@@ -79,6 +79,7 @@ export default {
   },
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, '../dist'),
+    // Build into "docs" for Github Pages hosting
+    path: path.resolve(__dirname, '../docs'),
   },
 };
