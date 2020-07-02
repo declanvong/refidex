@@ -8,6 +8,7 @@
 @value plannedColor: #888;
 @value soonColor: #22cc24;
 @value doneColor: accentColor;
+@value bubbleSize: 60px;
 
 body {
     background-color: bgColor;
@@ -48,8 +49,8 @@ body {
 }
 
 .bubble {
-    width: 60px;
-    height: 60px;
+    width: bubbleSize;
+    height: bubbleSize;
     border-radius: 50%;
     border-width: 2px;
     border-style: solid;

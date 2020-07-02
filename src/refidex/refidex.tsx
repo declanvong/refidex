@@ -23,8 +23,6 @@ const borderSvg = (
   </svg>
 );
 
-const spacing = 150;
-
 class Camera {
   // The camera bounds, in world space coordinates.
   @observable.ref
@@ -63,7 +61,7 @@ class Camera {
 
   @action.bound
   private onWheel(e: WheelEvent) {
-    const delta = e.deltaY * 0.002 * this.zoom;
+    const delta = e.deltaY * -0.002 * this.zoom;
     if ((delta > 0 && this.zoom >= 5) || (delta < 0 && this.zoom <= 0.1)) {
       return;
     }
@@ -93,13 +91,17 @@ class Camera {
   }
 }
 
+const SPACING_Y = 100;
+const SPACING_X = 150;
+const halfBubble = parseInt(styles.bubbleSize, 10) / 2;
+
 @observer
 export class Refidex extends React.Component<{ store: RefidexStore }> {
   private camera = new Camera();
 
   componentDidMount() {
     this.camera.bindEvents();
-    this.camera.setPosition((window.innerHeight / 4) - 30, (window.innerWidth / 2) - 30);
+    this.camera.setPosition((window.innerHeight / 4) - halfBubble, (window.innerWidth / 2) - halfBubble);
   }
   componentWillUnmount() {
     this.camera.unbindEvents();
@@ -117,14 +119,14 @@ export class Refidex extends React.Component<{ store: RefidexStore }> {
           <LineView
               key={i}
               status={line.status}
-              x1={line.start.column * spacing + 30}
-              y1={line.start.row * spacing + 30}
-              x2={line.end.column * spacing + 30}
-              y2={line.end.row * spacing + 30}
+              x1={line.start.column * SPACING_X + halfBubble}
+              y1={line.start.row * SPACING_Y + halfBubble}
+              x2={line.end.column * SPACING_X + halfBubble}
+              y2={line.end.row * SPACING_Y + halfBubble}
           />
         ))}
         {nodes.map((node, i) => (
-          <NodeView key={i} node={node} top={node.row * spacing} left={node.column * spacing} />
+          <NodeView key={i} node={node} top={node.row * SPACING_Y} left={node.column * SPACING_X} />
         ))}
       </div>
     )
