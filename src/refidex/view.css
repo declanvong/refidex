@@ -1,0 +1,87 @@
+
+@value firaMonoUrl: "https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap";
+
+@import url(firaMonoUrl);
+
+@value bgColor: #222;
+@value accentColor: #00c4cc;
+@value plannedColor: #888;
+@value soonColor: #22cc24;
+@value doneColor: accentColor;
+
+body {
+    background-color: bgColor;
+}
+
+.refidex {
+    transform: translate(300px, 300px);
+}
+
+.line {
+    position: absolute;
+}
+
+.lineSvg {
+    width: 100%;
+    height: 100%;
+}
+
+.lineSvgContent {
+    stroke: accentColor;
+    stroke-width: 2;
+}
+.lineSvgContent.statusPlanned {
+    stroke: plannedColor;
+}
+.lineSvgContent.statusSoon {
+    stroke: soonColor;
+}
+
+.node {
+    position: absolute;
+    font-family: 'Fira Mono', monospace;
+}
+
+.bubble {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-style: solid;
+    border-color: doneColor;
+    background-color: bgColor;
+
+    /* Center icon or content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+.bubble.statusPlanned {
+    border-color: plannedColor;
+}
+.bubble.statusSoon {
+    border-color: soonColor;
+}
+.bubble.statusInProgress {
+    border-style: dashed;
+}
+
+.title {
+    position: absolute;
+    width: 200px;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    text-align: center;
+    color: white;
+}
+
+.title > span {
+    display: inline-block;
+    background-color: bgColor;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
