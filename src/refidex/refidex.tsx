@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { LineView } from 'refidex/line';
@@ -94,9 +94,21 @@ const SPACING_X = parseInt(styles.spacingX, 10);
 const SPACING_Y = parseInt(styles.spacingY, 10);
 const halfBubble = parseInt(styles.bubbleSize, 10) / 2;
 
+type RefidexProps = { store: RefidexStore };
+
 @observer
-export class Refidex extends React.Component<{ store: RefidexStore }> {
+export class Refidex extends React.Component<RefidexProps> {
+  private currentDetailsId: string | undefined = undefined;
   private camera = new Camera();
+
+  constructor(props: RefidexProps) {
+    super(props);
+    makeObservable<Refidex, 'currentDetailsId' | 'onNodeClick' | 'onBackgroundClick'>(this, {
+      currentDetailsId: observable,
+      onNodeClick: action.bound,
+      onBackgroundClick: action.bound,
+    })
+  }
 
   componentDidMount() {
     this.camera.bindEvents();
@@ -106,27 +118,50 @@ export class Refidex extends React.Component<{ store: RefidexStore }> {
     this.camera.unbindEvents();
   }
 
+  private onNodeClick(e: React.MouseEvent, id: string) {
+    if (this.currentDetailsId === id) {
+      this.currentDetailsId = undefined;
+    } else {
+      this.currentDetailsId = id;
+    }
+    e.stopPropagation();
+  }
+
+  private onBackgroundClick() {
+    this.currentDetailsId = undefined;
+  }
+
   render() {
     const { nodes, lines } = this.props.store;
     return (
-      <div
-          className={styles.refidex}
-          style={{ transform: this.camera.transformString }}
-      >
-        {borderSvg}
-        {lines.map((line, i) => (
-          <LineView
-              key={i}
-              status={line.status}
-              x1={line.start.column * SPACING_X + halfBubble}
-              y1={line.start.row * SPACING_Y + halfBubble}
-              x2={line.end.column * SPACING_X + halfBubble}
-              y2={line.end.row * SPACING_Y + halfBubble}
-          />
-        ))}
-        {nodes.map((node, i) => (
-          <NodeView key={i} node={node} top={node.row * SPACING_Y} left={node.column * SPACING_X} />
-        ))}
+      <div className={styles.background} onClick={this.onBackgroundClick}>
+        <div
+            className={styles.refidex}
+            style={{ transform: this.camera.transformString }}
+
+        >
+          {borderSvg}
+          {lines.map((line, i) => (
+            <LineView
+                key={i}
+                status={line.status}
+                x1={line.start.column * SPACING_X + halfBubble}
+                y1={line.start.row * SPACING_Y + halfBubble}
+                x2={line.end.column * SPACING_X + halfBubble}
+                y2={line.end.row * SPACING_Y + halfBubble}
+            />
+          ))}
+          {nodes.map((node, i) => (
+            <NodeView
+                key={node.id}
+                node={node}
+                top={node.row * SPACING_Y}
+                left={node.column * SPACING_X}
+                showDetails={this.currentDetailsId === node.id}
+                onClick={this.onNodeClick}
+            />
+          ))}
+        </div>
       </div>
     )
   }

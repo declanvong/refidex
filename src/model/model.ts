@@ -15,6 +15,7 @@ export type RefidexNode = {
   // A globally unique identifier for this Node, to be used as a reference in other Nodes.
   id: string;
   title: string;
+  details?: string;
   icon?: React.ReactNode;
   // A list of Node IDs that this Node depends on. Cycles are not allowed.
   dependencies?: string[];
