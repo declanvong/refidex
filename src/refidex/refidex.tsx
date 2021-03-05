@@ -89,8 +89,8 @@ class Camera {
   }
 }
 
-const SPACING_Y = 100;
-const SPACING_X = 150;
+const SPACING_X = parseInt(styles.spacingX, 10);
+const SPACING_Y = parseInt(styles.spacingY, 10);
 const halfBubble = parseInt(styles.bubbleSize, 10) / 2;
 
 @observer

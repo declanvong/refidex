@@ -2,6 +2,27 @@ import { checkState } from 'base/preconditions';
 import { makeAutoObservable } from 'mobx';
 import { RefidexDomain, RefidexModel, RefidexNode, Status } from 'model/model';
 
+const CHILD_LIMIT = 7;
+
+function generateTrialPositions() {
+  const offsets = [
+    // Try place the node below the dependent node.
+    [0, 2],
+  ];
+
+  // Otherwise, attempt nodes to the diagonal left and right below the dependent node,
+  // beginning from the positions closest to the dependent node.
+  for (let i = 0; i < CHILD_LIMIT - 1; i++) {
+    const xPos = i % 2 === 0
+        ? i / 2 + 1
+        : -(Math.floor(i / 2) + 1);
+    offsets.push([xPos, 1]);
+  }
+
+  return offsets;
+}
+const TRIAL_OFFSETS = generateTrialPositions();
+
 type RefidexPosition = {
   row: number;
   column: number;
@@ -157,17 +178,14 @@ export class RefidexStore {
 
   domains: RefidexViewDomain[] = [];
 
-  // @computed
   get nodes() {
     return this.graph.nodes;
   }
 
-  // @computed
   get lines() {
     return this.graph.lines;
   }
 
-  // @computed
   private get graph() {
     const done = new Map<string, RefidexViewNode>();
     const map = new RefidexMap<RefidexNode>();
@@ -201,14 +219,7 @@ export class RefidexStore {
           const dependencyPos = dependencies[0].pos;
 
           let foundPosition = false;
-          for (const offset of [
-            // Try place the node below the dependent node.
-            [0, 2],
-            // Otherwise, try the bottom right
-            [1, 1],
-            // Otherwise, try the bottom left
-            [-1, 1],
-          ]) {
+          for (const offset of TRIAL_OFFSETS) {
             const trialPosition = movePos(dependencyPos, offset[0], offset[1]);
             if (!map.has(trialPosition)) {
               createAtPos(node, trialPosition);

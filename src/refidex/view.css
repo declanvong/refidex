@@ -9,6 +9,8 @@
 @value soonColor: #22cc24;
 @value doneColor: accentColor;
 @value bubbleSize: 60px;
+@value spacingX: 200px;
+@value spacingY: 150px;
 
 body {
     background-color: bgColor;
@@ -75,7 +77,7 @@ body {
 
 .title {
     position: absolute;
-    width: 200px;
+    width: calc(spacingX - 10px);
     top: 80px;
     left: 50%;
     transform: translateX(-50%);
