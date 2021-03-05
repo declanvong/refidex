@@ -7,7 +7,7 @@ const CHILD_LIMIT = 7;
 function generateTrialPositions() {
   const offsets = [
     // Try place the node below the dependent node.
-    [0, 2],
+    [0, 1],
   ];
 
   // Otherwise, attempt nodes to the diagonal left and right below the dependent node,
@@ -189,7 +189,7 @@ export class RefidexStore {
   private get graph() {
     const done = new Map<string, RefidexViewNode>();
     const map = new RefidexMap<RefidexNode>();
-    const backlog: RefidexNode[] = [];
+    const backlog = new Set<RefidexNode>();
     const lines: RefidexViewLine[] = [];
 
     const createAtPos = (node: RefidexNode, pos: RefidexPosition) => {
@@ -201,7 +201,7 @@ export class RefidexStore {
       map.set(viewNode.pos, viewNode.data);
     };
 
-    const performWork = (sourceNodes: RefidexNode[]) => {
+    const performWork = (sourceNodes: Set<RefidexNode>) => {
       for (const node of sourceNodes) {
         if (node.dependencies && node.dependencies.length > 0) {
           // Find the positions of all dependencies
@@ -209,30 +209,44 @@ export class RefidexStore {
           for (const dependency of node.dependencies) {
             const dependencyViewNode = done.get(dependency);
             if (!dependencyViewNode) {
-              backlog.push(node);
-              continue;
+              break;
             }
             dependencies.push(dependencyViewNode);
           }
-          // TODO(declan): support multiple dependency positions
-
-          const dependencyPos = dependencies[0].pos;
+          if (dependencies.length !== node.dependencies.length) {
+            // All dependencies haven't been placed yet, push this node onto the backlog and work
+            // on it later.
+            backlog.add(node);
+            continue;
+          }
+          // Dependency origin position is at [average of all dependencies x-pos, lowest y-pos]
+          let lowestY = Number.MIN_VALUE;
+          let averageX = 0;
+          for (let dep of dependencies) {
+            averageX += dep.pos.column;
+            lowestY = Math.max(dep.pos.row, lowestY);
+          }
+          averageX /= dependencies.length;
+          const dependencyPos = { column: Math.floor(averageX), row: lowestY };
 
           let foundPosition = false;
           for (const offset of TRIAL_OFFSETS) {
             const trialPosition = movePos(dependencyPos, offset[0], offset[1]);
             if (!map.has(trialPosition)) {
               createAtPos(node, trialPosition);
-              lines.push({
-                start: dependencyPos,
-                end: trialPosition,
-                status: node.status,
-              });
+              for (let dep of dependencies) {
+                lines.push({
+                  start: dep.pos,
+                  end: trialPosition,
+                  status: node.status,
+                });
+              }
               foundPosition = true;
               break;
             }
           }
           if (foundPosition) {
+            sourceNodes.delete(node);
             continue;
           }
 
@@ -241,23 +255,30 @@ export class RefidexStore {
           // Must be the root node. Unconnected nodes are not permitted.
           checkState(done.size === 0);
           createAtPos(node, { row: 0, column: 0 });
+          sourceNodes.delete(node);
         }
       }
     };
 
-    performWork(this.model.nodes);
+    performWork(new Set(this.model.nodes));
 
-    let count = 0;
-    while (backlog.length > 0) {
+    // Work on the backlog. If the backlog doesn't shrink for 2 loops, then we
+    // are stuck.
+    let lastBacklogSize = backlog.size;
+    let remainingStrikes = 2;
+    while (backlog.size > 0) {
       performWork(backlog);
-      if (count++ > 50) {
-        throw new Error('iteration cycle count exceeded 50');
+      if (backlog.size === lastBacklogSize) {
+        remainingStrikes--;
+      }
+      if (remainingStrikes === 0) {
+        throw new Error('could not perform graph analysis -- stuck in a loop');
       }
     }
 
     return {
       nodes: map.toList(),
-      lines,
+      lines: lines.reverse(),
     };
   }
 }
