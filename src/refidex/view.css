@@ -8,6 +8,7 @@
 @value plannedColor: #888;
 @value soonColor: #22cc24;
 @value doneColor: accentColor;
+@value strokeWidth: 3px;
 @value bubbleSize: 60px;
 @value spacingX: 200px;
 @value spacingY: 150px;
@@ -48,13 +49,15 @@ body {
 .node {
     position: absolute;
     font-family: 'Fira Mono', monospace;
+    font-size: 10pt;
 }
 
 .bubble {
     width: bubbleSize;
     height: bubbleSize;
+    box-sizing: border-box;
     border-radius: 50%;
-    border-width: 2px;
+    border-width: strokeWidth;
     border-style: solid;
     border-color: doneColor;
     background-color: bgColor;
@@ -74,14 +77,23 @@ body {
 .bubble.statusInProgress {
     border-style: dashed;
 }
+.bubble.statusInProgress.percentage {
+    border-color: transparent;
+}
+.bubbleSvg {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
 
 .title {
     position: absolute;
     width: calc(spacingX - 10px);
-    top: 80px;
+    top: bubbleSize;
     left: 50%;
+    margin-top: 10px;
     transform: translateX(-50%);
-
     text-align: center;
     color: white;
 }

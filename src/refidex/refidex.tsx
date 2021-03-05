@@ -7,6 +7,7 @@ import { RefidexStore } from 'refidex/refidex_presenter';
 import styles from './view.css';
 
 export const borderStyleId = 'border';
+// An SVG filter to add a stroke border to any text / HTML element.
 const borderSvg = (
   <svg width="100%" height="100%" style={{ display: 'none' }}>
     <defs>

@@ -18,9 +18,14 @@ export type RefidexNode = {
   icon?: React.ReactNode;
   // A list of Node IDs that this Node depends on. Cycles are not allowed.
   dependencies?: string[];
-  status?: Status;
   parentDomain?: string;
-};
+} & ({
+  status?: Exclude<Status, Status.IN_PROGRESS>,
+} | {
+  status: Status.IN_PROGRESS,
+  // Percent, from 0 - 1
+  progress?: number,
+});
 
 export type RefidexModel = {
   domains: RefidexDomain[],
