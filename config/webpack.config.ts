@@ -1,15 +1,12 @@
-import autoprefixer from 'autoprefixer';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as path from 'path';
-import postcssModulesValues from 'postcss-modules-values';
-import postcssUrl from 'postcss-url';
 
 const devMode = true;
 
 export default {
   mode: devMode ? 'development' : 'production',
-  devtool: devMode ? 'cheap-module-eval-source-map' : undefined,
+  devtool: devMode ? 'cheap-module-source-map' : undefined,
   devServer: devMode
     ? {
         contentBase: path.resolve(__dirname, '../docs'),
@@ -50,7 +47,13 @@ export default {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
-              plugins: () => [postcssModulesValues(), postcssUrl(), autoprefixer()],
+              postcssOptions: {
+                plugins: [
+                  'postcss-modules-values',
+                  'postcss-url',
+                  'autoprefixer',
+                ],
+              },
             },
           },
         ],

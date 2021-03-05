@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { LineView } from 'refidex/line';
@@ -25,13 +25,14 @@ const borderSvg = (
 
 class Camera {
   // The camera bounds, in world space coordinates.
-  @observable.ref
   private top = 0;
-  @observable.ref
   private left = 0;
-  @observable.ref
   // The camera zoom level.
   private zoom = 1;
+
+  constructor() {
+    makeAutoObservable(this);
+  }
 
   // Mouse down coordinates, in screen space
   private mouseDownState?: { cameraTop: number, cameraLeft: number, mouseX: number, mouseY: number };
@@ -45,13 +46,11 @@ class Camera {
     };
   };
 
-  @computed
   get transformString() {
     return `translate(${this.left}px, ${this.top}px) scale(${this.zoom})`;
   }
 
-  @action.bound
-  private onMouseMove(e: MouseEvent) {
+  private onMouseMove = (e: MouseEvent) => {
     if (!this.mouseDownState) {
       return;
     }
@@ -59,8 +58,7 @@ class Camera {
     this.left = this.mouseDownState.cameraLeft + (e.clientX - this.mouseDownState.mouseX);
   }
 
-  @action.bound
-  private onWheel(e: WheelEvent) {
+  private onWheel = (e: WheelEvent) => {
     const delta = e.deltaY * -0.002 * this.zoom;
     if ((delta > 0 && this.zoom >= 5) || (delta < 0 && this.zoom <= 0.1)) {
       return;

@@ -1,5 +1,5 @@
-import { checkExists, checkState } from 'base/preconditions';
-import { computed } from 'mobx';
+import { checkState } from 'base/preconditions';
+import { makeAutoObservable } from 'mobx';
 import { RefidexDomain, RefidexModel, RefidexNode, Status } from 'model/model';
 
 type RefidexPosition = {
@@ -151,21 +151,23 @@ class RefidexMap<T> {
 }
 
 export class RefidexStore {
-  constructor(private readonly model: RefidexModel) { }
+  constructor(private readonly model: RefidexModel) {
+    makeAutoObservable(this);
+  }
 
   domains: RefidexViewDomain[] = [];
 
-  @computed
+  // @computed
   get nodes() {
     return this.graph.nodes;
   }
 
-  @computed
+  // @computed
   get lines() {
     return this.graph.lines;
   }
 
-  @computed
+  // @computed
   private get graph() {
     const done = new Map<string, RefidexViewNode>();
     const map = new RefidexMap<RefidexNode>();
