@@ -16,7 +16,7 @@ export type RefidexNode = {
   id: string;
   title: string;
   details?: string;
-  icon?: React.ReactNode;
+  icon?: string;
   // A list of Node IDs that this Node depends on. Cycles are not allowed.
   dependencies?: string[];
   parentDomain?: string;

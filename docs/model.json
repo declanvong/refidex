@@ -1,0 +1,104 @@
+{
+  "domains": [],
+  "nodes": [
+    {
+      "id": "a",
+      "title": "Basic tech tree viewing",
+      "details": "Enable viewing of basic tech trees.",
+      "dependencies": [],
+      "status": 4,
+      "icon": "🌭"
+    },
+    {
+      "id": "b",
+      "title": "Multiple dependencies",
+      "details": "Allow a single node to have multiple dependencies.",
+      "dependencies": [
+        "a"
+      ],
+      "status": 4
+    },
+    {
+      "id": "c",
+      "title": "Groups",
+      "details": "Visually group nodes together, as well as allow dependencies on entire groups.",
+      "dependencies": [
+        "b"
+      ],
+      "status": 1
+    },
+    {
+      "id": "d",
+      "title": "File format",
+      "details": "Read models from a persistent on-disk file format",
+      "dependencies": [
+        "a"
+      ],
+      "status": 4
+    },
+    {
+      "id": "e",
+      "title": "Refactoring",
+      "details": "Clean up stuff",
+      "dependencies": [
+        "a"
+      ],
+      "status": 3,
+      "progress": 0.6
+    },
+    {
+      "id": "f",
+      "title": "Canvas panning",
+      "details": "Basic camera functionality, such as panning and zooming",
+      "dependencies": [
+        "a"
+      ],
+      "status": 4
+    },
+    {
+      "id": "g",
+      "title": "Cross-group dependencies",
+      "details": "Allow nodes to have dependencies on other groups, or other nodes inside another group",
+      "dependencies": [
+        "c"
+      ],
+      "status": 1
+    },
+    {
+      "id": "h",
+      "title": "Node descriptions",
+      "details": "Give nodes descriptions and a details view that shows it",
+      "dependencies": [
+        "a"
+      ],
+      "status": 4
+    },
+    {
+      "id": "i",
+      "title": "Node progress rings",
+      "details": "Give nodes progression, and display it as a ring on the node bubble",
+      "dependencies": [
+        "a"
+      ],
+      "status": 4
+    },
+    {
+      "id": "j",
+      "title": "Graph optimization and pruning",
+      "details": "Trim unnecessary lines by doing graph pre-optimization before rendering",
+      "dependencies": [
+        "b"
+      ],
+      "status": 1
+    },
+    {
+      "id": "k",
+      "title": "Edit mode",
+      "details": "Allow direct editing of the model by manipulating nodes and dependencies",
+      "dependencies": [
+        "d"
+      ],
+      "status": 1
+    }
+  ]
+}
