@@ -127,6 +127,6 @@ html, body {
     color: #111;
     cursor: text;
     max-width: 500px;
-
+    white-space: pre;
     box-shadow: 2px 2px 0px 1px rgba(0,0,0,0.4);
 }

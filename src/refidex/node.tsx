@@ -7,9 +7,8 @@ import styles from './view.css';
 
 const bubbleSize = parseInt(styles.bubbleSize, 10)
 const halfBubble = bubbleSize / 2;
-const svgStrokeWidth = parseInt(styles.strokeWidth, 10) - 1;
-const svgStrokeWidthPx = `${svgStrokeWidth}px`;
-const radius = halfBubble - (svgStrokeWidth / 2);
+const strokeWidth = parseInt(styles.strokeWidth, 10);
+const radius = halfBubble - (strokeWidth / 2);
 const circumference = 2 * Math.PI * radius;
 
 const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
@@ -72,7 +71,7 @@ export class NodeView extends React.Component<NodeViewProps> {
                 r={`${radius}px`}
                 fill="none"
                 stroke={styles.plannedColor}
-                strokeWidth={svgStrokeWidthPx}
+                strokeWidth={styles.strokeWidth}
             />
             <circle
                 cx={halfBubble}
@@ -81,7 +80,7 @@ export class NodeView extends React.Component<NodeViewProps> {
                 fill="none"
                 stroke={styles.doneColor}
                 strokeLinecap="round"
-                strokeWidth={svgStrokeWidthPx}
+                strokeWidth={styles.strokeWidth}
                 strokeDasharray={strokeDashProgress}
                 transform={`rotate(-90 ${halfBubble} ${halfBubble})`}
                 className={styles.bubbleProgress}
