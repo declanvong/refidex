@@ -3,8 +3,7 @@
 
 @import url(firaMonoUrl);
 
-@value bgColor: #222;
-@value accentColor: #00c4cc;
+@value bgColor, accentColor from "base/ui/colors.css";
 @value plannedColor: #888;
 @value soonColor: #22cc24;
 @value doneColor: accentColor;

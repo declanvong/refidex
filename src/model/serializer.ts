@@ -1,6 +1,9 @@
 import { checkExists, checkState } from 'base/preconditions';
 import { RefidexNode, Status } from 'model/model';
 
+export class RefidexParseError extends Error {
+}
+
 export class Serializer {
   static deserializeModel(input: any) {
     const { domains, nodes } = input;
@@ -52,7 +55,7 @@ export class Serializer {
       case Status.DONE:
         return status;
       default:
-        throw new Error(`expected status to be between ${Status.PLANNED} and ${Status.DONE} but received ${status} instead`);
+        throw new RefidexParseError(`expected status to be between ${Status.PLANNED} and ${Status.DONE} but received ${status} instead`);
     }
   }
 }
@@ -66,7 +69,7 @@ function isEmptyOr<T>(input: any, f: (input: any) => T): T | undefined {
 
 function checkIsString(s: any): string {
   if (typeof s !== 'string') {
-    throw new Error(`expected ${s} to be string but found ${typeof s} instead`);
+    throw new RefidexParseError(`expected ${s} to be string but found ${typeof s} instead`);
   }
   return s;
 }
@@ -78,7 +81,7 @@ function checkIsStringArray(sa: any): string[] {
 
 function checkIsNumber(n: any): number {
   if (typeof n !== 'number') {
-    throw new Error(`expected ${n} to be number but found ${typeof n} instead`);
+    throw new RefidexParseError(`expected ${n} to be number but found ${typeof n} instead`);
   }
   return n;
 }

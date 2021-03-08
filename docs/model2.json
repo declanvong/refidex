@@ -1,0 +1,22 @@
+{
+  "domains": [],
+  "nodes": [
+    {
+      "id": "a",
+      "title": "Basic tech tree viewing",
+      "details": "Enable viewing of basic tech trees.",
+      "dependencies": [],
+      "status": 4,
+      "icon": "🌭"
+    },
+    {
+      "id": "b",
+      "title": "Multiple dependencies",
+      "details": "Allow a single node to have multiple dependencies.",
+      "dependencies": [
+        "a"
+      ],
+      "status": 4
+    }
+  ]
+}

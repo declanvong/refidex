@@ -1,3 +1,4 @@
+import { Button } from 'base/ui/button';
 import { action, makeAutoObservable, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
@@ -94,19 +95,21 @@ const SPACING_X = parseInt(styles.spacingX, 10);
 const SPACING_Y = parseInt(styles.spacingY, 10);
 const halfBubble = parseInt(styles.bubbleSize, 10) / 2;
 
-type RefidexProps = { store: RefidexStore };
+type RefidexProps = { store: RefidexStore, onOpen(file: any): void };
 
 @observer
 export class Refidex extends React.Component<RefidexProps> {
   private currentDetailsId: string | undefined = undefined;
   private camera = new Camera();
+  private uploadFileRef = React.createRef<HTMLInputElement>();
 
   constructor(props: RefidexProps) {
     super(props);
-    makeObservable<Refidex, 'currentDetailsId' | 'onNodeClick' | 'onBackgroundClick'>(this, {
+    makeObservable<Refidex, 'currentDetailsId' | 'onNodeClick' | 'onBackgroundClick' | 'onUpload'>(this, {
       currentDetailsId: observable,
       onNodeClick: action.bound,
       onBackgroundClick: action.bound,
+      onUpload: action.bound,
     })
   }
 
@@ -131,10 +134,28 @@ export class Refidex extends React.Component<RefidexProps> {
     this.currentDetailsId = undefined;
   }
 
+  private onOpenClick = () => {
+    if (this.uploadFileRef.current) {
+      this.uploadFileRef.current.click();
+    }
+  }
+
+  private async onUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const input = this.uploadFileRef.current;
+    if (!input || !input.files || input.files.length !== 1) {
+      return;
+    }
+    const file = input.files[0];
+    const json = JSON.parse(await file.text());
+    this.props.onOpen(json);
+  }
+
   render() {
     const { nodes, lines } = this.props.store;
     return (
       <div className={styles.background} onClick={this.onBackgroundClick}>
+        <input type="file" style={{ display: 'none' }} ref={this.uploadFileRef} onChange={this.onUpload}/>
+        <Button onClick={this.onOpenClick}>Open</Button>
         <div
             className={styles.refidex}
             style={{ transform: this.camera.transformString }}

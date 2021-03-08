@@ -1,5 +1,5 @@
 import { checkState } from 'base/preconditions';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable } from 'mobx';
 import { RefidexDomain, RefidexModel, RefidexNode, Status } from 'model/model';
 
 const CHILD_LIMIT = 7;
@@ -172,8 +172,17 @@ class RefidexMap<T> {
 }
 
 export class RefidexStore {
-  constructor(private readonly model: RefidexModel) {
-    makeAutoObservable(this);
+  private model: RefidexModel;
+
+  constructor(model: RefidexModel) {
+    this.model = model;
+    makeAutoObservable<RefidexStore, 'model'>(this, {
+      model: observable,
+    });
+  }
+
+  setModel(model: RefidexModel) {
+    this.model = model;
   }
 
   domains: RefidexViewDomain[] = [];

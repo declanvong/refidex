@@ -1,0 +1,18 @@
+@value bgColor, bgColorLight, accentColor from "base/ui/colors.css";
+
+.button {
+    margin: 8px;
+    padding: 4px 8px;
+    outline: none;
+    background-color: bgColor;
+    color: white;
+    border: 2px solid white;
+    border-radius: 4px;
+
+    transition: background-color 0.1s ease-in, border-color 0.1s ease-in;
+}
+
+.button:active {
+    background-color: bgColorLight;
+    border-color: accentColor;
+}
